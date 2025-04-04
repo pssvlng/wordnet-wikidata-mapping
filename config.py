@@ -8,8 +8,8 @@ DATAFRAMES = {
     "yovisto_wikidata_kea_and_spotlight_df": pd.read_sql("select * from yovisto_wikidata_kea_and_spotlight_annotator", conn),
     "yovisto_wikidata_kea_df": pd.read_sql("select * from yovisto_wikidata_kea_annotator", conn),
     "yovisto_wikidata_spotlight_df": pd.read_sql("select * from yovisto_wikidata_spotlight_annotator", conn),
-    "john_wikidata_9328_df": pd.read_sql("select * from john_wikidata_9328", conn),
-    "krasimir_wikidata_30428_df": pd.read_sql("select * from krasimir_wikidata_30418", conn),
+    "john_wikidata_df": pd.read_sql("select * from john_wikidata", conn),
+    "krasimir_wikidata_30428_df": pd.read_sql("select * from krasimir_wikidata", conn),
     "babel_net_df": pd.read_sql(BABBELNET_QUERY, conn)
 }
 conn.close()
@@ -31,7 +31,7 @@ JOHN_LABELS = {
 
 BABBELNET_LABELS = {
     "dataframes": [
-        "john_wikidata_9328_df",
+        "john_wikidata_df",
         "yovisto_wikidata_spotlight_df",
         "yovisto_wikidata_kea_df",
         "yovisto_wikidata_kea_and_spotlight_df",
