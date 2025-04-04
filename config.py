@@ -1,11 +1,11 @@
 import pandas as pd
 import sqlite3
-from queries import BABBELNET_QUERY
+from queries import BABBELNET_QUERY, YOVISTO_COMBINED_QUERY
 
 # Load data
 conn = sqlite3.connect("wordnet_wikidata_mapping.db")
 DATAFRAMES = {
-    "yovisto_wikidata_kea_and_spotlight_df": pd.read_sql("select * from yovisto_wikidata_kea_and_spotlight_annotator", conn),
+    "yovisto_wikidata_kea_and_spotlight_df": pd.read_sql(YOVISTO_COMBINED_QUERY, conn),
     "yovisto_wikidata_kea_df": pd.read_sql("select * from yovisto_wikidata_kea_annotator", conn),
     "yovisto_wikidata_spotlight_df": pd.read_sql("select * from yovisto_wikidata_spotlight_annotator", conn),
     "john_wikidata_df": pd.read_sql("select * from john_wikidata", conn),
