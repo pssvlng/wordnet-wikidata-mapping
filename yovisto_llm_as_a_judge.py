@@ -54,7 +54,7 @@ def update_database(state: State):
     conn = sqlite3.connect(state["db_name"])
     cursor = conn.cursor()
     cursor.execute(        
-        "INSERT INTO yovisto_llm_as_a_judge (id, ili, label, wikidata, wikidata_label, wikidata_description, score) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO yovisto_llm_as_a_judge_staging (id, ili, label, wikidata, wikidata_label, wikidata_description, score) VALUES (?, ?, ?, ?, ?, ?, ?)",
         (state["id"], state["ili"], state["label"], state["wikidata"], state["wikidata_label"], state["wikidata_description"], state["score"]),
     )
     conn.commit()
@@ -104,5 +104,32 @@ def process_database(db_name:str):
         if idx % 100 == 0:
             print(f"Processed {idx} rows of {len(rows)}")                      
 
+def post_processing(db_name: str):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT t1.id, t1.ili, t1.wikidata, AVG(CAST(t1.score AS REAL)) AS final_score 
+        FROM yovisto_llm_as_a_judge_staging t1
+        GROUP BY t1.id
+        having final_score > 0.575
+        """
+    )
+    rows = cursor.fetchall()
+    conn.close()
+
+    data_to_insert = []    
+    for idx, row in enumerate(rows):
+        id, ili, wikidata, final_score = row                    
+        found_values = [item for item in data_to_insert if item[0] == id] + [item for item in data_to_insert if item[1] == ili] + [item for item in data_to_insert if item[2] == wikidata]
+        if len(found_values) == 0:
+            data_to_insert.append((id, ili, wikidata, str(final_score)))
+    
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.executemany("INSERT INTO yovisto_llm_as_a_judge (id, ili, wikidata, score) VALUES(?, ?, ?, ?)", data_to_insert)
+    conn.commit()
+    conn.close()
+
 if __name__ == "__main__":
     process_database('wordnet_wikidata_mapping.db')
+    post_processing('wordnet_wikidata_mapping.db')
