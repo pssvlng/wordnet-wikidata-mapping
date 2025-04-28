@@ -50,6 +50,8 @@ inner join wn_30_wn_31 t2 on t1.identifier  = t2.identifier
 inner join wn_all_synsets t3 on t3.Id = t2.id
 UNION
 SELECT ili from yovisto_llm_as_a_judge
+UNION
+SELECT ili from remaining_wn_synsets
 )
 select * from wn_all_synsets where ili not in (select ili from cte1)
 and SUBSTR(id, -1) = 'n';

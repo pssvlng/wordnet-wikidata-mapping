@@ -176,3 +176,5 @@ cython_debug/
 #unwanted files
 *.csv
 tmp.py
+examples_sentences.db
+hidden.py
