@@ -3,9 +3,9 @@ import sqlite3
 query = """
     select ili,wikidata,group_concat(source),avg(score) 
     from (
-       select ili,wikidata,1 as source,NULL as score from john_wikidata where ili is not NULL
+       select ili,wikidata,1 as source,NULL as score from oewn_wikidata where ili is not NULL
        UNION
-       select ili,wikidata,2 as source,NULL from krasimir_wikidata where ili is not NULL
+       select ili,wikidata,2 as source,NULL from gf_wikidata where ili is not NULL
        UNION 
        select t1.ili,t1.wikidata,3 as source,max(t1.score,t2.score)
              from yovisto_wikidata_kea_annotator t1
