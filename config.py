@@ -8,8 +8,8 @@ DATAFRAMES = {
     "yovisto_wikidata_kea_and_spotlight_df": pd.read_sql(YOVISTO_COMBINED_QUERY, conn),
     "yovisto_wikidata_kea_df": pd.read_sql("select * from yovisto_wikidata_kea_annotator", conn),
     "yovisto_wikidata_spotlight_df": pd.read_sql("select * from yovisto_wikidata_spotlight_annotator", conn),
-    "john_wikidata_df": pd.read_sql("select * from john_wikidata", conn),
-    "krasimir_wikidata_30428_df": pd.read_sql("select * from krasimir_wikidata", conn),
+    "oewn_wikidata_df": pd.read_sql("select * from oewn_wikidata", conn),
+    "gf_wikidata_30428_df": pd.read_sql("select * from gf_wikidata", conn),
     "babel_net_df": pd.read_sql(BABBELNET_QUERY, conn)
 }
 conn.close()
@@ -19,30 +19,30 @@ JOHN_LABELS = {
         "yovisto_wikidata_spotlight_df",
         "yovisto_wikidata_kea_df",
         "yovisto_wikidata_kea_and_spotlight_df",
-        "krasimir_wikidata_30428_df"
+        "gf_wikidata_30428_df"
     ],
     "labels": [
-        "john_wikidata and yovisto_wikidata_spotlight",
-        "john_wikidata and yovisto_wikidata_kea",
-        "john_wikidata and yovisto_wikidata (combined)",
-        "john_wikidata and krasimir_wikidata"
+        "oewn_wikidata and yovisto_wikidata_spotlight",
+        "oewn_wikidata and yovisto_wikidata_kea",
+        "oewn_wikidata and yovisto_wikidata_intersection",
+        "oewn_wikidata and gf_wikidata"
     ]
 }
 
 BABBELNET_LABELS = {
     "dataframes": [
-        "john_wikidata_df",
+        "oewn_wikidata_df",
         "yovisto_wikidata_spotlight_df",
         "yovisto_wikidata_kea_df",
         "yovisto_wikidata_kea_and_spotlight_df",
-        "krasimir_wikidata_30428_df"
+        "gf_wikidata_30428_df"
     ],
     "labels": [
-        "babbelnet and john_wikidata",
+        "babbelnet and oewn_wikidata",
         "babbelnet and yovisto_wikidata_spotlight",
         "babbelnet and yovisto_wikidata_kea",
-        "babbelnet and yovisto_wikidata (combined)",
-        "babbelnet and krasimir_wikidata"
+        "babbelnet and yovisto_wikidata_intersection",
+        "babbelnet and gf_wikidata"
     ]
 }
 
@@ -53,10 +53,10 @@ YOVISTO_LABELS = {
         "yovisto_wikidata_kea_and_spotlight_df"
     ],
     "labels": [
-        "yovisto_wikidata_kea and john_wikidata",
-        "yovisto_wikidata_spotlight and john_wikidata",
-        "yovisto_wikidata (combined) and john_wikidata",
-        "yovisto_wikidata (combined) and babelnet",
+        "yovisto_wikidata_kea and oewn_wikidata",
+        "yovisto_wikidata_spotlight and oewn_wikidata",
+        "yovisto_wikidata_intersection and oewn_wikidata",
+        "yovisto_wikidata_intersection and babelnet",
         "yovisto_wikidata_spotlight and babelnet",
         "yovisto_wikidata_kea and babelnet"
     ]

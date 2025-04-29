@@ -44,7 +44,7 @@ def display_overview():
     # Analysis: John Wikidata
     print("\nJohn Mc. Wikidata Dataset Analysis\n")
     john_results = __perform_analysis(
-        DATAFRAMES["john_wikidata_df"],
+        DATAFRAMES["oewn_wikidata_df"],
         [DATAFRAMES[df] for df in JOHN_LABELS['dataframes']],
         JOHN_LABELS['labels']
     )
@@ -60,7 +60,7 @@ def display_overview():
     # Analysis: Yovisto Kea and Spotlight with High Annotator Confidence Score
     print("\nYovisto Kea and Spotlight with High Annotator Confidence Score\n")
     john_spotlight_results = __compare_dataset_overlap(
-        DATAFRAMES["john_wikidata_df"],
+        DATAFRAMES["oewn_wikidata_df"],
         DATAFRAMES["yovisto_wikidata_spotlight_df"],
         YOVISTO_LABELS['labels'][1],
         False,
@@ -69,7 +69,7 @@ def display_overview():
     )
 
     john_kea_results = __compare_dataset_overlap(
-        DATAFRAMES["john_wikidata_df"],
+        DATAFRAMES["oewn_wikidata_df"],
         DATAFRAMES["yovisto_wikidata_kea_df"],
         YOVISTO_LABELS['labels'][0],
         False,
@@ -78,7 +78,7 @@ def display_overview():
     )
 
     john_combined_results = __compare_dataset_overlap(
-        DATAFRAMES["john_wikidata_df"],
+        DATAFRAMES["oewn_wikidata_df"],
         DATAFRAMES["yovisto_wikidata_kea_and_spotlight_df"],
         YOVISTO_LABELS['labels'][2],
         False,
