@@ -7,9 +7,12 @@ import re
 from queries import ASSIGNED_ILIS_QUERY, REMAINING_WN_SYNSETS_QUERY
 from transformers import pipeline
 from hidden import HUGGING_FACE_API_TOKEN
+from gpt4all import GPT4All
 
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 model = SentenceTransformer(MODEL_NAME)
+
+model_gpt4all = GPT4All("Meta-Llama-3-8B-Instruct.Q4_0.gguf")
 
 synonym_generator = pipeline("fill-mask", model="distilbert-base-uncased")
 
@@ -199,7 +202,7 @@ def expand_lemmas_from_text_generation_model(id:str, lemmas:list[str], definitio
         sentence = example_sentences.get(f'{id}-{lemma.strip()}')
         if lemma.strip().lower() in sentence.lower():
             try:
-                prompt = f"Generate a comma-separated list of synonyms for the word '{lemma}' that has the meaning of '{definition}'."
+                prompt = f"You are a linguistic assistant. Generate a comma-separated list of synonyms for the word '{lemma}' that has the meaning of '{definition}'."
                 payload = {
                     "inputs": prompt,
                     "parameters": {"max_new_tokens": 100, "temperature": 0.7},
@@ -209,6 +212,21 @@ def expand_lemmas_from_text_generation_model(id:str, lemmas:list[str], definitio
                 generated_text = response.json()[0]["generated_text"]
                 synonyms = [syn.strip() for syn in generated_text.split(",") if syn.strip()]                
                 result.extend(synonyms)
+            except Exception as e:
+                print(f"Error generating synonyms for lemma '{lemma}': {e}")
+    return list(set(result))
+
+def expand_lemmas_from_gpt4all(id:str, lemmas:list[str], definition:str) -> list[str]:
+    result = []
+    result.extend(lemmas)
+    for lemma in lemmas:                                        
+        sentence = example_sentences.get(f'{id}-{lemma.strip()}')
+        if lemma.strip().lower() in sentence.lower():
+            try:
+                prompt = f"You are a linguistic assistant. Generate a comma-separated list of synonyms for the word '{lemma}' that has the meaning of '{definition}'."                                
+                with model_gpt4all.chat_session():
+                    generated_text = model_gpt4all.generate(prompt, max_tokens=1024)
+                    print(generated_text)                    
             except Exception as e:
                 print(f"Error generating synonyms for lemma '{lemma}': {e}")
     return list(set(result))
@@ -223,8 +241,9 @@ def process_database(db_name: str):
     for idx, row in enumerate(rows):
         id, ili, lemmas, description = row
         labels = lemmas.split(',')        
-        labels = expand_lemmas_from_masked_example_sentence2(id, labels)        
+        #labels = expand_lemmas_from_masked_example_sentence2(id, labels)        
         #labels = expand_lemmas_from_text_generation_model(id, labels, description)        
+        labels = expand_lemmas_from_gpt4all(id, labels, description)        
         for label in labels:
             state = {
                 "db_name": db_name,
