@@ -163,7 +163,7 @@ def post_processing(db_name: str):
     cursor.execute("""
         select id, ili, wikidata, wikidata_label, wikidata_description, CAST(score as REAL) as final_score  
         from remaining_wn_synsets_staging
-        where final_score > 0.575
+        where final_score > 0.8
         order by final_score desc
         """
     )

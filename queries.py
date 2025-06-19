@@ -85,8 +85,6 @@ ALL_MAPPINGS_QUERY = """
 select t2.id, t1.ili, t1.wikidata from oewn_wikidata t1 
 INNER JOIN wn_all_synsets t2 on t2.ili = t1.ili
 where t1.ili is not NULL
-UNION
-SELECT id, ili, wikidata from gf_wikidata where ili is not NULL
 UNION 
 SELECT t1.id, t1.ili, t1.wikidata from yovisto_wikidata_kea_annotator t1
 inner join yovisto_wikidata_spotlight_annotator t2 on t1.ili = t2.ili
@@ -100,4 +98,8 @@ SELECT id, ili, wikidata
 FROM yovisto_llm_as_a_judge t1
 UNION
 SELECT ili, id, wikidata from remaining_wn_synsets
+UNION
+SELECT ili, id, wikidata from yovisto_llm_as_a_judge
+UNION
+SELECT id, ili, wikidata from gf_wikidata where ili is not NULL
 """
