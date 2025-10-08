@@ -56,13 +56,13 @@ def get_wikidata_has_part_candidates2(db_name):
                 items = []        
 
             try:    
-                synset = wn.synset(f"o{row[0]}")
+                synset = wn.synset(f"{row[0]}")
                 for meronym in synset.meronyms():
-                    hits = list(filter(lambda x: x[0] == meronym.id[1:], lookups))
+                    hits = list(filter(lambda x: x[0] == meronym.id, lookups))
                     for hit in hits:                    
                         if  hit[2] not in items:
                             #print((row[0], row[1], row[2], hit[2]))
-                            has_part_data.append((row[0], row[1], synset.metadata()['subject'], meronym.id[1:], meronym.ili.id, meronym.metadata()['subject'], row[2], hit[2]))
+                            has_part_data.append((row[0], row[1], synset.metadata()['subject'], meronym.id, meronym.ili.id, meronym.metadata()['subject'], row[2], hit[2]))
             except Exception as e:
                 print(f"Error processing synset for row {row[0]}: {e}")
                 continue
@@ -128,4 +128,4 @@ def get_wikidata_has_part_candidates(db_name):
 
 #combine_data_sets('wordnet_wikidata_mapping.db')                        
 #get_wikidata_has_part_candidates('wordnet_wikidata_mapping.db')
-get_wikidata_has_part_candidates2('wordnet_wikidata_mapping.db')
+#get_wikidata_has_part_candidates2('wordnet_wikidata_mapping.db')
